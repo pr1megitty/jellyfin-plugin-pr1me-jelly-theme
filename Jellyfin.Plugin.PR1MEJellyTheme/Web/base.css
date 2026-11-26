@@ -1,0 +1,131 @@
+/* =====================================================================
+   PR1ME Jelly Theme: base (colour, glass tokens, hover, focus)
+   Style only. Nothing here targets the video player or its controls.
+   ===================================================================== */
+
+/* Jellyfin's own palette variables, retuned. html:root beats MUI's [data-theme] rules. */
+html:root,
+html[data-theme] {
+  --jf-palette-primary-main: var(--pr1me-accent);
+  --jf-palette-primary-light: var(--pr1me-accent);
+  --jf-palette-primary-dark: var(--pr1me-accent);
+  --jf-palette-primary-mainChannel: var(--pr1me-accent-ch);
+  --jf-palette-primary-contrastText: var(--pr1me-on-accent);
+  --jf-palette-secondary-main: var(--pr1me-accent);
+  --jf-palette-secondary-mainChannel: var(--pr1me-accent-ch);
+  --jf-palette-secondary-contrastText: var(--pr1me-on-accent);
+  --jf-palette-background-default: #0b0b0c;
+  --jf-palette-background-paper: #151517;
+  --jf-palette-divider: rgba(255, 255, 255, 0.09);
+  --jf-palette-action-selectedOpacity: 0.16;
+  --jf-card-borderRadius: var(--pr1me-radius);
+  --jf-palette-AppBar-defaultBg: rgba(14, 14, 16, 0.72);
+  --jf-palette-AppBar-transparentBg: rgba(14, 14, 16, 0.5);
+  --jf-palette-background-defaultImage:
+    radial-gradient(1100px 520px at 50% -8%, rgba(var(--pr1me-accent-rgb), 0.14), transparent 62%),
+    radial-gradient(800px 460px at 100% 18%, rgba(120, 140, 255, 0.07), transparent 60%);
+
+  /* Theme tokens used by the other modules */
+  --pr1me-glass-bg: rgba(255, 255, 255, var(--pr1me-glass-alpha));
+  --pr1me-glass-bg-strong: rgba(255, 255, 255, calc(var(--pr1me-glass-alpha) + 0.05));
+  --pr1me-glass-border: rgba(255, 255, 255, 0.12);
+  --pr1me-glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --pr1me-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --pr1me-ring: 0 0 0 2px rgba(11, 11, 12, 0.9), 0 0 0 4px var(--pr1me-accent);
+  --pr1me-glow: 0 0 24px rgba(var(--pr1me-accent-rgb), 0.28);
+}
+
+::selection {
+  background: rgba(var(--pr1me-accent-rgb), 0.35);
+  color: #fff;
+}
+
+html:root * {
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+/* ---- Buttons ------------------------------------------------------- */
+.emby-button,
+.paper-icon-button-light,
+.emby-tab-button {
+  transition: background-color 0.22s var(--pr1me-ease), color 0.22s var(--pr1me-ease),
+    box-shadow 0.22s var(--pr1me-ease), transform 0.22s var(--pr1me-ease);
+}
+
+.emby-button.raised:not(.button-submit):not(.btnPlay) {
+  background: var(--pr1me-glass-bg-strong);
+  border-radius: 12px;
+  box-shadow: var(--pr1me-glass-edge), inset 0 0 0 1px var(--pr1me-glass-border);
+}
+
+.emby-button.raised.button-submit {
+  background: var(--pr1me-accent);
+  color: var(--pr1me-on-accent);
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: var(--pr1me-glow);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .emby-button.raised:not(.button-submit):not(.btnPlay):hover {
+    background: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
+  }
+
+  .emby-button.raised.button-submit:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+}
+
+/* ---- Focus: one clear accent ring, animated in --------------------- */
+.emby-button.show-focus:focus,
+.paper-icon-button-light.show-focus:focus,
+.emby-tab-button.show-focus:focus {
+  box-shadow: var(--pr1me-ring);
+}
+
+.emby-button.raised.show-focus:focus:not(.button-submit) {
+  background: var(--pr1me-accent);
+  color: var(--pr1me-on-accent);
+}
+
+/* ---- Inputs -------------------------------------------------------- */
+.emby-input,
+.emby-textarea,
+.emby-select-withcolor {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--pr1me-glass-border);
+  border-radius: 12px;
+  padding-left: 0.85em;
+  padding-right: 0.85em;
+  transition: border-color 0.22s var(--pr1me-ease), box-shadow 0.22s var(--pr1me-ease),
+    background-color 0.22s var(--pr1me-ease);
+}
+
+.emby-input:focus,
+.emby-textarea:focus,
+.emby-select-withcolor:focus {
+  border-color: var(--pr1me-accent);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 3px rgba(var(--pr1me-accent-rgb), 0.22);
+}
+
+/* ---- Dialogs and menus: frosted look without blur (cheap, safe over video) */
+.dialog,
+.actionSheet,
+.MuiPopover-paper,
+.MuiMenu-paper,
+.MuiDialog-paper {
+  border: 1px solid var(--pr1me-glass-border);
+  border-radius: calc(var(--pr1me-radius) + 2px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), var(--pr1me-glass-edge);
+}
+
+/* ---- Typography polish --------------------------------------------- */
+.sectionTitle,
+.itemName,
+.pageTitle {
+  letter-spacing: -0.01em;
+}

@@ -1,0 +1,12 @@
+[
+    {
+        "guid": "84bdf9ee-91e9-4fb7-b97a-f15c1c23ced4",
+        "name": "PR1ME Jelly Theme",
+        "overview": "Glass UI theme for Jellyfin: top bar, rows, details page and login page.",
+        "description": "A premium glass look for the Jellyfin web UI and the official mobile apps. Frosted top bar, refined rows and cards, a bigger details-page backdrop with cleaner metadata, a styled login page, and a dashboard page for accent colour and per-module toggles. Style only: it never touches playback and leaves other plugins alone. Requires the File Transformation plugin.",
+        "owner": "pr1megitty",
+        "category": "General",
+        "imageUrl": "https://raw.githubusercontent.com/pr1megitty/jellyfin-plugin-pr1me-jelly-theme/main/logo.png",
+        "versions": []
+    }
+]

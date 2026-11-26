@@ -1,0 +1,117 @@
+/* =====================================================================
+   PR1ME Jelly Theme: login page
+   Background (your image or an ambient glow), a glass sign-in card, and your
+   login disclaimer restyled as the page's branding header.
+   ===================================================================== */
+
+/* Own stacking context, so the background sits above Jellyfin's page background but under the form. */
+#loginPage {
+  isolation: isolate;
+}
+
+#loginPage::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 50% 0%, rgba(var(--pr1me-accent-rgb), 0.18), transparent 62%),
+    linear-gradient(rgba(11, 11, 12, var(--pr1me-login-dim, 0.55)), rgba(11, 11, 12, var(--pr1me-login-dim, 0.55))),
+    var(--pr1me-login-image, none) center / cover no-repeat,
+    #0b0b0c;
+}
+
+/* The card: branding on top, then the form, then the helper buttons */
+#loginPage > .margin-auto-y {
+  display: flex;
+  flex-direction: column;
+  width: min(92vw, 34em);
+  max-width: 34em;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2em 1.75em 1.5em;
+  border-radius: calc(var(--pr1me-radius) + 8px);
+  background: var(--pr1me-glass-bg);
+  border: 1px solid var(--pr1me-glass-border);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), var(--pr1me-glass-edge);
+  -webkit-backdrop-filter: blur(var(--pr1me-blur)) saturate(160%);
+  backdrop-filter: blur(var(--pr1me-blur)) saturate(160%);
+}
+
+#loginPage .readOnlyContent {
+  display: contents;
+}
+
+#loginPage .loginDisclaimerContainer {
+  order: -2;
+  margin-top: 0;
+  margin-bottom: 1.6em;
+}
+
+#loginPage .manualLoginForm,
+#loginPage .visualLoginForm {
+  order: -1;
+}
+
+#loginPage .manualLoginForm .sectionTitle,
+#loginPage .visualLoginForm h1 {
+  font-size: 1.15em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Disclaimer as branding. Inline styles in your HTML need !important to be restyled. */
+#loginPage .loginDisclaimer > div > div:first-child {
+  font-size: 1.25em !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  background: linear-gradient(90deg, #ffffff 0%, var(--pr1me-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+#loginPage .loginDisclaimer > div > div:nth-child(2) {
+  opacity: 0.8 !important;
+  margin-top: 0.35em;
+}
+
+#loginPage .loginDisclaimer > div > div:nth-child(3) {
+  display: inline-block;
+  margin-top: 1em !important;
+  padding: 0.35em 0.95em;
+  border-radius: 999px;
+  background: var(--pr1me-glass-bg);
+  box-shadow: inset 0 0 0 1px var(--pr1me-glass-border);
+  font-size: 0.78em !important;
+  opacity: 0.75 !important;
+}
+
+#loginPage .button-submit {
+  margin-top: 0.6em;
+}
+
+/* Form and helper buttons share one column width */
+#loginPage .manualLoginForm,
+#loginPage .readOnlyContent > .emby-button {
+  width: 100%;
+  max-width: 18em;
+  align-self: center;
+}
+
+#loginPage .readOnlyContent .emby-button {
+  margin-top: 0.5em;
+}
+
+@media (max-width: 40em) {
+  #loginPage > .margin-auto-y {
+    padding: 1.5em 1.1em 1.2em;
+  }
+
+  #loginPage .loginDisclaimer > div > div:first-child {
+    letter-spacing: 0.18em !important;
+  }
+}

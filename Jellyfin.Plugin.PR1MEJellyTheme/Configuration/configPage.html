@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PR1ME Jelly Theme</title>
+</head>
+<body>
+    <div id="pr1meConfigPage" data-role="page" class="page type-interior pluginConfigurationPage pr1meConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+        <style>
+            .pr1meConfigurationPage .pr1meCard {
+                padding: 1.25em 1.4em;
+                margin-bottom: 1.4em;
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.05);
+                box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            }
+
+            .pr1meConfigurationPage .pr1meCard h3 {
+                margin: 0 0 0.9em;
+            }
+
+            .pr1meConfigurationPage .pr1meSwatches {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.6em;
+                align-items: center;
+                margin-bottom: 0.9em;
+            }
+
+            .pr1meConfigurationPage .pr1meSwatch {
+                width: 2.2em;
+                height: 2.2em;
+                border-radius: 50%;
+                border: 2px solid rgba(255, 255, 255, 0.25);
+                cursor: pointer;
+                padding: 0;
+                transition: transform 0.15s ease, border-color 0.15s ease;
+            }
+
+            .pr1meConfigurationPage .pr1meSwatch:hover {
+                transform: scale(1.12);
+            }
+
+            .pr1meConfigurationPage .pr1meSwatch.active {
+                border-color: #fff;
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+            }
+
+            .pr1meConfigurationPage input[type="color"] {
+                width: 2.6em;
+                height: 2.6em;
+                padding: 0;
+                border: 0;
+                background: none;
+                cursor: pointer;
+            }
+
+            .pr1meConfigurationPage .pr1meRange {
+                display: flex;
+                align-items: center;
+                gap: 1em;
+            }
+
+            .pr1meConfigurationPage .pr1meRange input[type="range"] {
+                flex: 1;
+                accent-color: var(--pr1me-accent, #C6F432);
+            }
+
+            .pr1meConfigurationPage .pr1meRange output {
+                min-width: 3.5em;
+                text-align: right;
+                opacity: 0.85;
+            }
+
+            .pr1meConfigurationPage .pr1meRangeBlock {
+                margin-bottom: 1.2em;
+            }
+
+            .pr1meConfigurationPage .pr1meRangeBlock label {
+                display: block;
+                margin-bottom: 0.3em;
+            }
+
+            .pr1meConfigurationPage .pr1mePreview {
+                height: 5em;
+                border-radius: 16px;
+                margin-top: 1em;
+                background: linear-gradient(135deg, #1b1b1f, #0b0b0c);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .pr1meConfigurationPage .pr1mePreview span {
+                position: absolute;
+                inset: 0.8em 1em;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                background: rgba(255, 255, 255, 0.08);
+                box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+            }
+        </style>
+
+        <div data-role="content">
+            <div class="content-primary">
+                <form class="pr1meConfigurationForm">
+                    <div class="sectionTitleContainer flex align-items-center">
+                        <h2 class="sectionTitle">PR1ME Jelly Theme</h2>
+                    </div>
+                    <p class="fieldDescription">Changes appear after a browser refresh. If a style ever misbehaves, add <code>?pr1me=off</code> to the address to switch the theme off in that browser, and <code>?pr1me=on</code> to bring it back.</p>
+
+                    <div class="pr1meCard">
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input is="emby-checkbox" type="checkbox" id="Enabled" />
+                                <span>Enable theme</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription">Master switch. Off means Jellyfin looks exactly as it did before.</div>
+                        </div>
+                    </div>
+
+                    <div class="pr1meCard">
+                        <h3>Accent colour</h3>
+                        <div class="pr1meSwatches" id="swatches"></div>
+                        <div class="inputContainer">
+                            <input is="emby-input" type="text" id="AccentColor" label="Accent colour (#RRGGBB)" maxlength="7" />
+                        </div>
+                        <div class="pr1mePreview" id="preview"><span>Glass preview</span></div>
+                    </div>
+
+                    <div class="pr1meCard">
+                        <h3>Glass and shape</h3>
+                        <div class="pr1meRangeBlock">
+                            <label for="GlassBlur">Blur strength</label>
+                            <div class="pr1meRange"><input type="range" id="GlassBlur" min="0" max="40" step="1" /><output id="GlassBlurOut"></output></div>
+                        </div>
+                        <div class="pr1meRangeBlock">
+                            <label for="GlassOpacity">Glass tint</label>
+                            <div class="pr1meRange"><input type="range" id="GlassOpacity" min="4" max="60" step="1" /><output id="GlassOpacityOut"></output></div>
+                        </div>
+                        <div class="pr1meRangeBlock">
+                            <label for="CornerRadius">Corner roundness</label>
+                            <div class="pr1meRange"><input type="range" id="CornerRadius" min="0" max="28" step="1" /><output id="CornerRadiusOut"></output></div>
+                        </div>
+                    </div>
+
+                    <div class="pr1meCard">
+                        <h3>Modules</h3>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input is="emby-checkbox" type="checkbox" id="ModuleTheme" />
+                                <span>Colour, buttons, inputs and focus</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription">Midnight base, accent colour everywhere, smooth hover and focus states.</div>
+                        </div>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input is="emby-checkbox" type="checkbox" id="ModuleTopBar" />
+                                <span>Top bar and menu</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription">Frosted glass header, accent tab underline, restyled side menu.</div>
+                        </div>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input is="emby-checkbox" type="checkbox" id="ModuleRows" />
+                                <span>Rows and cards</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription">Row titles, rounded cards, hover lift, progress bars. The TBD Exclusive carousel is never touched.</div>
+                        </div>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input is="emby-checkbox" type="checkbox" id="ModuleDetails" />
+                                <span>Details page</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription">Bigger backdrop, metadata chips, cast and episode layout.</div>
+                        </div>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input is="emby-checkbox" type="checkbox" id="ModuleLogin" />
+                                <span>Login page</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription">Glass sign-in card, background, and your login disclaimer styled as branding.</div>
+                        </div>
+                    </div>
+
+                    <div class="pr1meCard">
+                        <h3>Login page</h3>
+                        <div class="inputContainer">
+                            <input is="emby-input" type="text" id="LoginBackgroundUrl" label="Background image URL (optional)" />
+                            <div class="fieldDescription">A full web address (https://...) or a path on this server. Leave empty for the built-in glow.</div>
+                        </div>
+                        <div class="pr1meRangeBlock">
+                            <label for="LoginDim">Background darkening</label>
+                            <div class="pr1meRange"><input type="range" id="LoginDim" min="0" max="90" step="1" /><output id="LoginDimOut"></output></div>
+                        </div>
+                        <p class="fieldDescription">The text on the login page comes from Dashboard, Branding, Login disclaimer. This module restyles it.</p>
+                    </div>
+
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            (function () {
+                var pluginId = '84bdf9ee-91e9-4fb7-b97a-f15c1c23ced4';
+                var presets = ['#C6F432', '#00A4DC', '#FF5A5F', '#FFB020', '#B388FF', '#2EE6A6', '#FF7AB6', '#FFFFFF'];
+
+                function $(id) { return document.getElementById(id); }
+
+                function normalizeHex(value) {
+                    var v = (value || '').trim();
+                    if (v.charAt(0) !== '#') { v = '#' + v; }
+                    return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toUpperCase() : null;
+                }
+
+                function renderSwatches(current) {
+                    var holder = $('swatches');
+                    holder.innerHTML = '';
+                    presets.forEach(function (hex) {
+                        var b = document.createElement('button');
+                        b.type = 'button';
+                        b.className = 'pr1meSwatch' + (hex === current ? ' active' : '');
+                        b.style.background = hex;
+                        b.title = hex;
+                        b.addEventListener('click', function () { setAccent(hex); });
+                        holder.appendChild(b);
+                    });
+                    var picker = document.createElement('input');
+                    picker.type = 'color';
+                    picker.value = current.toLowerCase();
+                    picker.title = 'Custom colour';
+                    picker.addEventListener('input', function () { setAccent(picker.value.toUpperCase()); });
+                    holder.appendChild(picker);
+                }
+
+                function setAccent(hex) {
+                    var valid = normalizeHex(hex);
+                    if (!valid) { return; }
+                    $('AccentColor').value = valid;
+                    renderSwatches(valid);
+                    updatePreview();
+                }
+
+                function bindRange(id) {
+                    var input = $(id), out = $(id + 'Out');
+                    var suffix = id === 'GlassOpacity' || id === 'LoginDim' ? '%' : 'px';
+                    function sync() { out.textContent = input.value + suffix; updatePreview(); }
+                    input.addEventListener('input', sync);
+                    sync();
+                }
+
+                function updatePreview() {
+                    var accent = normalizeHex($('AccentColor').value) || '#C6F432';
+                    var alpha = (Number($('GlassOpacity').value) || 8) / 100;
+                    var radius = Number($('CornerRadius').value) || 0;
+                    var blur = Number($('GlassBlur').value) || 0;
+                    var span = $('preview').querySelector('span');
+                    span.style.background = 'rgba(255,255,255,' + alpha + ')';
+                    span.style.borderRadius = radius + 'px';
+                    span.style.backdropFilter = 'blur(' + blur + 'px)';
+                    span.style.boxShadow = 'inset 0 0 0 1px rgba(255,255,255,.14), 0 0 24px ' + accent + '44';
+                    span.style.color = accent;
+                    $('preview').style.borderRadius = (radius + 2) + 'px';
+                }
+
+                var page = $('pr1meConfigPage');
+
+                page.addEventListener('pageshow', function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        $('Enabled').checked = config.Enabled !== false;
+                        $('ModuleTheme').checked = config.ModuleTheme !== false;
+                        $('ModuleTopBar').checked = config.ModuleTopBar !== false;
+                        $('ModuleRows').checked = config.ModuleRows !== false;
+                        $('ModuleDetails').checked = config.ModuleDetails !== false;
+                        $('ModuleLogin').checked = config.ModuleLogin !== false;
+                        $('GlassBlur').value = config.GlassBlur;
+                        $('GlassOpacity').value = config.GlassOpacity;
+                        $('CornerRadius').value = config.CornerRadius;
+                        $('LoginDim').value = config.LoginDim;
+                        $('LoginBackgroundUrl').value = config.LoginBackgroundUrl || '';
+                        ['GlassBlur', 'GlassOpacity', 'CornerRadius', 'LoginDim'].forEach(bindRange);
+                        setAccent(config.AccentColor || '#C6F432');
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+
+                $('AccentColor').addEventListener('change', function () {
+                    var valid = normalizeHex(this.value);
+                    if (valid) { setAccent(valid); }
+                });
+
+                page.querySelector('.pr1meConfigurationForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        config.Enabled = $('Enabled').checked;
+                        config.AccentColor = normalizeHex($('AccentColor').value) || '#C6F432';
+                        config.GlassBlur = parseInt($('GlassBlur').value, 10);
+                        config.GlassOpacity = parseInt($('GlassOpacity').value, 10);
+                        config.CornerRadius = parseInt($('CornerRadius').value, 10);
+                        config.ModuleTheme = $('ModuleTheme').checked;
+                        config.ModuleTopBar = $('ModuleTopBar').checked;
+                        config.ModuleRows = $('ModuleRows').checked;
+                        config.ModuleDetails = $('ModuleDetails').checked;
+                        config.ModuleLogin = $('ModuleLogin').checked;
+                        config.LoginBackgroundUrl = $('LoginBackgroundUrl').value.trim();
+                        config.LoginDim = parseInt($('LoginDim').value, 10);
+                        ApiClient.updatePluginConfiguration(pluginId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
+                    });
+                    return false;
+                });
+            })();
+        </script>
+    </div>
+</body>
+</html>

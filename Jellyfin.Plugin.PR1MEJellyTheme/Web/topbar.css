@@ -1,0 +1,101 @@
+/* =====================================================================
+   PR1ME Jelly Theme: top bar
+   A floating glass bar. The video player's own header (.osdHeader) is excluded.
+   ===================================================================== */
+
+.skinHeader:not(.osdHeader) {
+  background: rgba(14, 14, 16, calc(0.5 + var(--pr1me-glass-alpha))) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(var(--pr1me-blur)) saturate(170%) !important;
+  backdrop-filter: blur(var(--pr1me-blur)) saturate(170%) !important;
+  border-bottom: 1px solid var(--pr1me-glass-border);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 12px 32px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.3s var(--pr1me-ease);
+}
+
+/* Soft accent hairline along the bottom edge of the bar */
+.skinHeader:not(.osdHeader)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 0%, rgba(var(--pr1me-accent-rgb), 0.55) 50%, transparent 100%);
+  opacity: 0.55;
+}
+
+.skinHeader:not(.osdHeader) .headerButton {
+  border-radius: 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .skinHeader:not(.osdHeader) .headerButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+}
+
+/* Header and library tabs */
+.skinHeader:not(.osdHeader) .emby-tab-button {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: 10px 10px 0 0;
+}
+
+.skinHeader:not(.osdHeader) .emby-tab-button-active {
+  color: #fff;
+}
+
+.skinHeader:not(.osdHeader) .emby-tab-button-active::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--pr1me-accent);
+  box-shadow: 0 0 14px rgba(var(--pr1me-accent-rgb), 0.7);
+}
+
+.skinHeader:not(.osdHeader) .emby-tab-button {
+  position: relative;
+}
+
+/* Side drawer */
+.mainDrawer {
+  background: rgba(16, 16, 18, 0.92);
+  border-right: 1px solid var(--pr1me-glass-border);
+}
+
+.mainDrawer .navMenuOption {
+  border-radius: 12px;
+  margin: 2px 8px;
+  transition: background-color 0.22s var(--pr1me-ease), color 0.22s var(--pr1me-ease);
+}
+
+.mainDrawer .navMenuOption-selected {
+  background: rgba(var(--pr1me-accent-rgb), 0.16) !important;
+  color: var(--pr1me-accent) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mainDrawer .navMenuOption:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Extra guard: never blur while the video route is active */
+html[data-pr1me-page="video"] .skinHeader {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skinHeader:not(.osdHeader),
+  .mainDrawer .navMenuOption {
+    transition: none;
+  }
+}

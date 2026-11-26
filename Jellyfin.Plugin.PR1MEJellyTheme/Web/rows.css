@@ -1,0 +1,127 @@
+/* =====================================================================
+   PR1ME Jelly Theme: rows and cards
+   Home-page rows, library grids and the cards in them.
+   The TBD Exclusive Style carousel (.tbdExclusiveContainer) is left completely alone.
+   ===================================================================== */
+
+/* ---- Row titles ----------------------------------------------------- */
+.verticalSection:not(.tbdExclusiveContainer) .sectionTitle-cards,
+.verticalSection:not(.tbdExclusiveContainer) > .sectionTitleContainer .sectionTitle {
+  font-weight: 650;
+  font-size: 1.32em;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.verticalSection:not(.tbdExclusiveContainer) .sectionTitleContainer-cards .sectionTitle-cards::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  margin-right: 0.55em;
+  border-radius: 3px;
+  vertical-align: -0.08em;
+  background: var(--pr1me-accent);
+  box-shadow: 0 0 10px rgba(var(--pr1me-accent-rgb), 0.55);
+}
+
+/* ---- Cards ---------------------------------------------------------- */
+.itemsContainer:not(.tbdExclusiveItemsContainer) .card .cardScalable {
+  border-radius: var(--pr1me-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: transform 0.35s var(--pr1me-ease), box-shadow 0.35s var(--pr1me-ease);
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .card .cardContent,
+.itemsContainer:not(.tbdExclusiveItemsContainer) .card .cardImageContainer {
+  border-radius: var(--pr1me-radius);
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .card .cardImageContainer {
+  transition: transform 0.6s var(--pr1me-ease);
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .card .cardText-first {
+  font-weight: 600;
+  color: #fff;
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .card .cardText-secondary {
+  font-size: 82%;
+  opacity: 0.62;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .itemsContainer:not(.tbdExclusiveItemsContainer) .card:hover .cardScalable {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.5), 0 0 0 1.5px rgba(var(--pr1me-accent-rgb), 0.65);
+  }
+
+  .itemsContainer:not(.tbdExclusiveItemsContainer) .card:hover .cardImageContainer {
+    transform: scale(1.045);
+  }
+}
+
+/* Remote / keyboard focus keeps Jellyfin's own ring, now in the accent colour. */
+
+/* ---- Progress, badges and hover overlay ---------------------------- */
+.itemProgressBar {
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.itemProgressBarForeground {
+  background: var(--pr1me-accent);
+  border-radius: 4px;
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .countIndicator,
+.itemsContainer:not(.tbdExclusiveItemsContainer) .playedIndicator {
+  background: var(--pr1me-accent);
+  color: var(--pr1me-on-accent);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .cardOverlayContainer {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.05) 65%);
+  border-radius: var(--pr1me-radius);
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .cardOverlayFab-primary {
+  background: var(--pr1me-accent) !important;
+  color: var(--pr1me-on-accent) !important;
+  box-shadow: var(--pr1me-glow);
+}
+
+.itemsContainer:not(.tbdExclusiveItemsContainer) .cardOverlayButton:not(.cardOverlayFab-primary) {
+  background: rgba(20, 20, 22, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* ---- Row scroll arrows --------------------------------------------- */
+.verticalSection:not(.tbdExclusiveContainer) .emby-scrollbuttons-button {
+  background: rgba(20, 20, 22, 0.6);
+  border: 1px solid var(--pr1me-glass-border);
+  border-radius: 50%;
+  box-shadow: var(--pr1me-glass-edge);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .verticalSection:not(.tbdExclusiveContainer) .emby-scrollbuttons-button:hover:not(:disabled) {
+    background: var(--pr1me-accent);
+    color: var(--pr1me-on-accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .itemsContainer .card .cardScalable,
+  .itemsContainer .card .cardImageContainer {
+    transition: none !important;
+    transform: none !important;
+  }
+}

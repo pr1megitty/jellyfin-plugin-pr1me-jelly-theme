@@ -1,0 +1,186 @@
+/* =====================================================================
+   PR1ME Jelly Theme: item details page
+   Bigger backdrop, cleaner metadata, better cast and episode layout.
+   Everything is scoped to .itemDetailPage.
+   ===================================================================== */
+
+/* ---- Bigger backdrop that melts into the page ----------------------- */
+.itemDetailPage .itemBackdrop {
+  height: 54vh;
+  min-height: 320px;
+}
+
+.itemDetailPage .itemBackdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, #0b0b0c 0%, rgba(11, 11, 12, 0.82) 20%, rgba(11, 11, 12, 0) 62%),
+    linear-gradient(to right, rgba(11, 11, 12, 0.5), rgba(11, 11, 12, 0) 55%);
+}
+
+@media (max-width: 62.5em) {
+  .itemDetailPage .itemBackdrop {
+    height: 40vh;
+    min-height: 240px;
+  }
+}
+
+/* The ribbon becomes transparent so the backdrop fade flows straight into the content */
+.itemDetailPage .detailRibbon {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* ---- Title and metadata -------------------------------------------- */
+.itemDetailPage .itemName {
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+}
+
+.itemDetailPage .itemMiscInfo {
+  gap: 0.45em;
+}
+
+.itemDetailPage .itemMiscInfo .mediaInfoItem {
+  margin: 0;
+  padding: 0.14em 0.65em;
+  border-radius: 999px;
+  background: var(--pr1me-glass-bg);
+  box-shadow: inset 0 0 0 1px var(--pr1me-glass-border);
+  font-size: 86%;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.itemDetailPage .itemMiscInfo .mediaInfoOfficialRating {
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  background: transparent;
+}
+
+.itemDetailPage .itemMiscInfo .bulletSeparator {
+  display: none;
+}
+
+.itemDetailPage .tagline {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.itemDetailPage .overview {
+  max-width: 68ch;
+  line-height: 1.65;
+  font-size: 1.02em;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ---- Action buttons ------------------------------------------------- */
+.itemDetailPage .mainDetailButtons .detailButton {
+  border-radius: 14px;
+  transition: background-color 0.22s var(--pr1me-ease), transform 0.22s var(--pr1me-ease);
+}
+
+.itemDetailPage .mainDetailButtons .btnPlay,
+.itemDetailPage .mainDetailButtons .btnReplay {
+  background: var(--pr1me-accent);
+  color: var(--pr1me-on-accent);
+  border-radius: 999px;
+  box-shadow: var(--pr1me-glow);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .itemDetailPage .mainDetailButtons .detailButton:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .itemDetailPage .mainDetailButtons .btnPlay:hover,
+  .itemDetailPage .mainDetailButtons .btnReplay:hover {
+    background: var(--pr1me-accent);
+    filter: brightness(1.07);
+  }
+}
+
+/* ---- Track selectors as glass fields ------------------------------- */
+.itemDetailPage .detailTrackSelect {
+  border-radius: 12px;
+}
+
+/* ---- Section headings ----------------------------------------------- */
+.itemDetailPage .detailVerticalSection .sectionTitle {
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.itemDetailPage .detailVerticalSection .sectionTitle-cards::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  margin-right: 0.55em;
+  border-radius: 3px;
+  vertical-align: -0.08em;
+  background: var(--pr1me-accent);
+}
+
+/* ---- Cast and crew -------------------------------------------------- */
+.itemDetailPage #castContent .card .cardText-first,
+.itemDetailPage #guestCastContent .card .cardText-first {
+  font-weight: 600;
+  color: #fff;
+}
+
+.itemDetailPage #castContent .card .cardText-secondary,
+.itemDetailPage #guestCastContent .card .cardText-secondary {
+  opacity: 0.6;
+  font-size: 80%;
+}
+
+.itemDetailPage #castContent .card .cardScalable,
+.itemDetailPage #guestCastContent .card .cardScalable {
+  border-radius: calc(var(--pr1me-radius) + 4px);
+}
+
+/* ---- Episodes and track lists as glass rows ------------------------- */
+.itemDetailPage .listItem-border {
+  margin: 0 0 0.5em;
+  border: 0;
+  border-radius: calc(var(--pr1me-radius) - 2px);
+  background: var(--pr1me-glass-bg);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: background-color 0.25s var(--pr1me-ease), box-shadow 0.25s var(--pr1me-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .itemDetailPage .listItem-border:hover {
+    background: var(--pr1me-glass-bg-strong);
+    box-shadow: inset 0 0 0 1px rgba(var(--pr1me-accent-rgb), 0.5);
+  }
+}
+
+.itemDetailPage .listItem-indexnumberleft {
+  color: var(--pr1me-accent);
+  font-weight: 700;
+}
+
+.itemDetailPage .listItemImage {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.itemDetailPage .listItemBodyText:first-child {
+  font-weight: 600;
+  color: #fff;
+}
+
+.itemDetailPage .listItemBodyText-secondary,
+.itemDetailPage .listItem-overview {
+  opacity: 0.68;
+}
