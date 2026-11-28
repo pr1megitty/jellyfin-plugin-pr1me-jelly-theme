@@ -130,14 +130,35 @@
                     </div>
 
                     <div class="pr1meCard">
+                        <h3>Top glow</h3>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input is="emby-checkbox" type="checkbox" id="GlowFollowsAccent" />
+                                <span>Match the accent colour</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription">The soft light at the top of every page and behind the login card. Untick to give it its own colour.</div>
+                        </div>
+                        <div id="glowPickerWrap">
+                            <div class="pr1meSwatches" id="glowSwatches"></div>
+                            <div class="inputContainer">
+                                <input is="emby-input" type="text" id="GlowColor" label="Glow colour (#RRGGBB)" maxlength="7" />
+                            </div>
+                        </div>
+                        <div class="pr1meRangeBlock">
+                            <label for="GlowStrength">Glow strength (0 = off)</label>
+                            <div class="pr1meRange"><input type="range" id="GlowStrength" min="0" max="30" step="1" /><output id="GlowStrengthOut"></output></div>
+                        </div>
+                    </div>
+
+                    <div class="pr1meCard">
                         <h3>Glass and shape</h3>
                         <div class="pr1meRangeBlock">
                             <label for="GlassBlur">Blur strength</label>
                             <div class="pr1meRange"><input type="range" id="GlassBlur" min="0" max="40" step="1" /><output id="GlassBlurOut"></output></div>
                         </div>
                         <div class="pr1meRangeBlock">
-                            <label for="GlassOpacity">Glass tint</label>
-                            <div class="pr1meRange"><input type="range" id="GlassOpacity" min="4" max="60" step="1" /><output id="GlassOpacityOut"></output></div>
+                            <label for="GlassOpacity">Glass tint (header, buttons, rows)</label>
+                            <div class="pr1meRange"><input type="range" id="GlassOpacity" min="4" max="24" step="1" /><output id="GlassOpacityOut"></output></div>
                         </div>
                         <div class="pr1meRangeBlock">
                             <label for="CornerRadius">Corner roundness</label>
@@ -191,7 +212,7 @@
                             <div class="fieldDescription">A full web address (https://...) or a path on this server. Leave empty for the built-in glow.</div>
                         </div>
                         <div class="pr1meRangeBlock">
-                            <label for="LoginDim">Background darkening</label>
+                            <label for="LoginDim">Background image darkening (only affects your background image)</label>
                             <div class="pr1meRange"><input type="range" id="LoginDim" min="0" max="90" step="1" /><output id="LoginDimOut"></output></div>
                         </div>
                         <p class="fieldDescription">The text on the login page comes from Dashboard, Branding, Login disclaimer. This module restyles it.</p>
@@ -210,6 +231,7 @@
             (function () {
                 var pluginId = '84bdf9ee-91e9-4fb7-b97a-f15c1c23ced4';
                 var presets = ['#C6F432', '#00A4DC', '#FF5A5F', '#FFB020', '#B388FF', '#2EE6A6', '#FF7AB6', '#FFFFFF'];
+                var glowPresets = ['#6E8BFF', '#B388FF', '#FF5A5F', '#FFB020', '#2EE6A6', '#00A4DC', '#FF7AB6', '#C6F432'];
 
                 function $(id) { return document.getElementById(id); }
 
@@ -219,23 +241,24 @@
                     return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toUpperCase() : null;
                 }
 
-                function renderSwatches(current) {
-                    var holder = $('swatches');
+                // Swatches plus a custom colour picker. Works for both the accent and the glow.
+                function renderSwatches(holderId, list, current, onPick) {
+                    var holder = $(holderId);
                     holder.innerHTML = '';
-                    presets.forEach(function (hex) {
+                    list.forEach(function (hex) {
                         var b = document.createElement('button');
                         b.type = 'button';
                         b.className = 'pr1meSwatch' + (hex === current ? ' active' : '');
                         b.style.background = hex;
                         b.title = hex;
-                        b.addEventListener('click', function () { setAccent(hex); });
+                        b.addEventListener('click', function () { onPick(hex); });
                         holder.appendChild(b);
                     });
                     var picker = document.createElement('input');
                     picker.type = 'color';
                     picker.value = current.toLowerCase();
                     picker.title = 'Custom colour';
-                    picker.addEventListener('input', function () { setAccent(picker.value.toUpperCase()); });
+                    picker.addEventListener('input', function () { onPick(picker.value.toUpperCase()); });
                     holder.appendChild(picker);
                 }
 
@@ -243,13 +266,26 @@
                     var valid = normalizeHex(hex);
                     if (!valid) { return; }
                     $('AccentColor').value = valid;
-                    renderSwatches(valid);
+                    renderSwatches('swatches', presets, valid, setAccent);
+                    updatePreview();
+                }
+
+                function setGlow(hex) {
+                    var valid = normalizeHex(hex);
+                    if (!valid) { return; }
+                    $('GlowColor').value = valid;
+                    renderSwatches('glowSwatches', glowPresets, valid, setGlow);
+                    updatePreview();
+                }
+
+                function syncGlowPicker() {
+                    $('glowPickerWrap').style.display = $('GlowFollowsAccent').checked ? 'none' : '';
                     updatePreview();
                 }
 
                 function bindRange(id) {
                     var input = $(id), out = $(id + 'Out');
-                    var suffix = id === 'GlassOpacity' || id === 'LoginDim' ? '%' : 'px';
+                    var suffix = (id === 'GlassOpacity' || id === 'LoginDim' || id === 'GlowStrength') ? '%' : 'px';
                     function sync() { out.textContent = input.value + suffix; updatePreview(); }
                     input.addEventListener('input', sync);
                     sync();
@@ -257,16 +293,21 @@
 
                 function updatePreview() {
                     var accent = normalizeHex($('AccentColor').value) || '#C6F432';
+                    var glow = $('GlowFollowsAccent').checked ? accent : (normalizeHex($('GlowColor').value) || accent);
+                    var glowAlpha = (Number($('GlowStrength').value) || 0) / 100;
                     var alpha = (Number($('GlassOpacity').value) || 8) / 100;
                     var radius = Number($('CornerRadius').value) || 0;
                     var blur = Number($('GlassBlur').value) || 0;
-                    var span = $('preview').querySelector('span');
+                    var preview = $('preview');
+                    var span = preview.querySelector('span');
+                    var r = parseInt(glow.substr(1, 2), 16), g = parseInt(glow.substr(3, 2), 16), b = parseInt(glow.substr(5, 2), 16);
+                    preview.style.background = 'radial-gradient(260px 90px at 50% -10%, rgba(' + r + ',' + g + ',' + b + ',' + (glowAlpha * 2.2) + '), transparent 70%), #0b0b0c';
                     span.style.background = 'rgba(255,255,255,' + alpha + ')';
                     span.style.borderRadius = radius + 'px';
                     span.style.backdropFilter = 'blur(' + blur + 'px)';
                     span.style.boxShadow = 'inset 0 0 0 1px rgba(255,255,255,.14), 0 0 24px ' + accent + '44';
                     span.style.color = accent;
-                    $('preview').style.borderRadius = (radius + 2) + 'px';
+                    preview.style.borderRadius = (radius + 2) + 'px';
                 }
 
                 var page = $('pr1meConfigPage');
@@ -280,20 +321,31 @@
                         $('ModuleRows').checked = config.ModuleRows !== false;
                         $('ModuleDetails').checked = config.ModuleDetails !== false;
                         $('ModuleLogin').checked = config.ModuleLogin !== false;
+                        $('GlowFollowsAccent').checked = config.GlowFollowsAccent !== false;
                         $('GlassBlur').value = config.GlassBlur;
                         $('GlassOpacity').value = config.GlassOpacity;
                         $('CornerRadius').value = config.CornerRadius;
+                        $('GlowStrength').value = config.GlowStrength;
                         $('LoginDim').value = config.LoginDim;
                         $('LoginBackgroundUrl').value = config.LoginBackgroundUrl || '';
-                        ['GlassBlur', 'GlassOpacity', 'CornerRadius', 'LoginDim'].forEach(bindRange);
+                        ['GlassBlur', 'GlassOpacity', 'CornerRadius', 'GlowStrength', 'LoginDim'].forEach(bindRange);
                         setAccent(config.AccentColor || '#C6F432');
+                        setGlow(config.GlowColor || '#6E8BFF');
+                        syncGlowPicker();
                         Dashboard.hideLoadingMsg();
                     });
                 });
 
+                $('GlowFollowsAccent').addEventListener('change', syncGlowPicker);
+
                 $('AccentColor').addEventListener('change', function () {
                     var valid = normalizeHex(this.value);
                     if (valid) { setAccent(valid); }
+                });
+
+                $('GlowColor').addEventListener('change', function () {
+                    var valid = normalizeHex(this.value);
+                    if (valid) { setGlow(valid); }
                 });
 
                 page.querySelector('.pr1meConfigurationForm').addEventListener('submit', function (e) {
@@ -302,6 +354,9 @@
                     ApiClient.getPluginConfiguration(pluginId).then(function (config) {
                         config.Enabled = $('Enabled').checked;
                         config.AccentColor = normalizeHex($('AccentColor').value) || '#C6F432';
+                        config.GlowFollowsAccent = $('GlowFollowsAccent').checked;
+                        config.GlowColor = normalizeHex($('GlowColor').value) || '#6E8BFF';
+                        config.GlowStrength = parseInt($('GlowStrength').value, 10);
                         config.GlassBlur = parseInt($('GlassBlur').value, 10);
                         config.GlassOpacity = parseInt($('GlassOpacity').value, 10);
                         config.CornerRadius = parseInt($('CornerRadius').value, 10);

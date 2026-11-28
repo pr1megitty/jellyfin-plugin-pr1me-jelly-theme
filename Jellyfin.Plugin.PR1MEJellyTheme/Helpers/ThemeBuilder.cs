@@ -98,8 +98,16 @@ public static partial class ThemeBuilder
         double luminance = (0.2126 * Linear(r)) + (0.7152 * Linear(g)) + (0.0722 * Linear(b));
         string onAccent = luminance > 0.38 ? "#0B0B0C" : "#FFFFFF";
 
+        // Top glow: its own colour (or the accent) and strength.
+        string glowHex = config.GlowFollowsAccent ? accent : NormalizeAccent(config.GlowColor);
+        int gr = int.Parse(glowHex.AsSpan(1, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        int gg = int.Parse(glowHex.AsSpan(3, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        int gb = int.Parse(glowHex.AsSpan(5, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        int glowStrength = Math.Clamp(config.GlowStrength, 0, 30);
+        string glowAlpha = (glowStrength / 100.0).ToString("0.###", CultureInfo.InvariantCulture);
+
         int blur = Math.Clamp(config.GlassBlur, 0, 40);
-        int opacity = Math.Clamp(config.GlassOpacity, 4, 60);
+        int opacity = Math.Clamp(config.GlassOpacity, 4, 24);
         int radius = Math.Clamp(config.CornerRadius, 0, 28);
         string alpha = (opacity / 100.0).ToString("0.###", CultureInfo.InvariantCulture);
 
@@ -109,6 +117,8 @@ public static partial class ThemeBuilder
         sb.AppendLine($"  --pr1me-accent-rgb: {r}, {g}, {b};");
         sb.AppendLine($"  --pr1me-accent-ch: {r} {g} {b};");
         sb.AppendLine($"  --pr1me-on-accent: {onAccent};");
+        sb.AppendLine($"  --pr1me-glow-rgb: {gr}, {gg}, {gb};");
+        sb.AppendLine($"  --pr1me-glow-alpha: {glowAlpha};");
         sb.AppendLine($"  --pr1me-blur: {blur}px;");
         sb.AppendLine($"  --pr1me-glass-alpha: {alpha};");
         sb.AppendLine($"  --pr1me-radius: {radius}px;");

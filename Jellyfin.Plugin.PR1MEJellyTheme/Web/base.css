@@ -22,8 +22,8 @@ html[data-theme] {
   --jf-palette-AppBar-defaultBg: rgba(14, 14, 16, 0.72);
   --jf-palette-AppBar-transparentBg: rgba(14, 14, 16, 0.5);
   --jf-palette-background-defaultImage:
-    radial-gradient(1100px 520px at 50% -8%, rgba(var(--pr1me-accent-rgb), 0.14), transparent 62%),
-    radial-gradient(800px 460px at 100% 18%, rgba(120, 140, 255, 0.07), transparent 60%);
+    radial-gradient(1100px 520px at 50% -8%, rgba(var(--pr1me-glow-rgb, var(--pr1me-accent-rgb)), var(--pr1me-glow-alpha, 0.14)), transparent 62%),
+    radial-gradient(800px 460px at 100% 18%, rgba(var(--pr1me-glow-rgb, var(--pr1me-accent-rgb)), calc(var(--pr1me-glow-alpha, 0.14) * 0.45)), transparent 60%);
 
   /* Theme tokens used by the other modules */
   --pr1me-glass-bg: rgba(255, 255, 255, var(--pr1me-glass-alpha));
@@ -42,6 +42,20 @@ html[data-theme] {
 
 html:root * {
   scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+/* ---- Dark ink on everything filled with the accent ------------------ */
+html .MuiAvatar-root .MuiAvatar-fallback {
+  color: var(--pr1me-on-accent) !important;
+}
+
+html .MuiAvatar-root:not(:has(img)) {
+  color: var(--pr1me-on-accent) !important;
+}
+
+html .emby-checkbox:checked + span + .checkboxOutline > .checkboxIcon,
+html .emby-checkbox:checked + span + .checkboxOutline > .checkboxIcon-checked {
+  color: var(--pr1me-on-accent);
 }
 
 /* ---- Buttons ------------------------------------------------------- */
@@ -110,6 +124,19 @@ html:root * {
   border-color: var(--pr1me-accent);
   background: rgba(255, 255, 255, 0.09);
   box-shadow: 0 0 0 3px rgba(var(--pr1me-accent-rgb), 0.22);
+}
+
+/* Browser autofill (saved logins) keeps the dark glass look */
+.emby-input:-webkit-autofill,
+.emby-input:-webkit-autofill:hover,
+.emby-input:-webkit-autofill:focus,
+.emby-textarea:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px #1c1c1f inset;
+  box-shadow: 0 0 0 1000px #1c1c1f inset;
+  border-color: var(--pr1me-glass-border);
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 /* ---- Dialogs and menus: frosted look without blur (cheap, safe over video) */
